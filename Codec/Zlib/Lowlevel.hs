@@ -7,6 +7,9 @@ module Codec.Zlib.Lowlevel
     , Strategy(..)
     , deflateInit2
     , inflateInit2
+    , inflateReset2
+    , c_inflate_reset2
+    , c_inflate_sync
     , c_free_z_stream_inflate
     , c_free_z_stream_deflate
     , c_set_avail_in
@@ -55,6 +58,15 @@ foreign import ccall unsafe "inflate_init2"
 
 inflateInit2 :: ZStream' -> WindowBits -> IO ()
 inflateInit2 zstream wb = c_inflateInit2 zstream (wbToInt wb)
+
+foreign import ccall unsafe "inflate_reset2"
+    c_inflate_reset2 :: ZStream' -> CInt -> IO CUInt
+
+inflateReset2 :: ZStream' -> WindowBits -> IO Int
+inflateReset2 zstream wb = fmap fromIntegral $ c_inflate_reset2 zstream (wbToInt wb)
+
+foreign import ccall unsafe "inflate_sync"
+    c_inflate_sync :: ZStream' -> IO CUInt
 
 foreign import ccall unsafe "&free_z_stream_inflate"
     c_free_z_stream_inflate :: FunPtr (ZStream' -> IO ())

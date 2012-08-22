@@ -37,6 +37,16 @@ int deflate_set_dictionary(z_stream *stream, const char* dictionary,
         return deflateSetDictionary(stream, dictionary, dictLength);
 }
 
+int inflate_reset2(z_stream *stream, int window_bits)
+{
+	return inflateReset2(stream, window_bits);
+}
+
+int inflate_sync(z_stream *stream)
+{
+	return inflateSync(stream);
+}
+
 void free_z_stream_inflate (z_stream *stream)
 {
 	inflateEnd(stream);
